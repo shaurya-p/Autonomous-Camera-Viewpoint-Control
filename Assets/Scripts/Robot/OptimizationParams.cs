@@ -8,22 +8,27 @@ using UnityEngine;
 ///     of Kinova Gen3 7-DOF robotic arm
 /// </summary>
 
-public class OptParameters : MonoBehaviour
+public class OptimizationParams : MonoBehaviour
 {
     
     public int updateRate = 10;
+
     public GameObject cameraToolFrame;
     public GameObject manipulatorToolFrame;
+    public GameObject debugObj;
+    public GameObject debugObj2;
+
     private float startTime;
     private float deltaTime;
+    
     private Transform camera_tf;
     private Transform manipulator_tf;
+    
     private Vector3 position_m;
     private Vector3 predictedPos_m;
     private Vector3 velocity_m;
     private Vector3 direction_c;
     private Vector3 position_c;
-    private Ray ray_c;
     
     void Start()    
     {
@@ -34,13 +39,13 @@ public class OptParameters : MonoBehaviour
         manipulator_tf = manipulatorToolFrame.transform;
 
         deltaTime = 1f / updateRate;
-        InvokeRepeating("Objective1", 1f, deltaTime);
+        InvokeRepeating("ScalarObjective1", 1f, deltaTime);
     
     }
 
     void Update() {}
 
-    private float Objective1()
+    private float ScalarObjective1()
     {
         // Predict manipulator EE position 300 ms in the future
         velocity_m = (manipulator_tf.position - position_m) / deltaTime;
@@ -49,15 +54,27 @@ public class OptParameters : MonoBehaviour
         // Update current manipulator position
         position_m = manipulator_tf.position;
 
-        direction_c = camera_tf.TransformDirection(new Vector3(0f, 1f, 0f));
+        // Camera arm position and viewing direction
+        // [0, 1, 0] is the viewing direction unit vector w.r.t. local camera frame
+        direction_c = camera_tf.TransformDirection(new Vector3(0f, 1f, 0f));    
         position_c = camera_tf.position;
-        
-        //Ray ray_c = new Ray(position_c, direction_c);
-        //float distance = Vector3.Cross(ray_c.direction, predictedPoint - viewpoint_ray.origin).magnitude;
-        
-        float distance = Vector3.Cross(direction_c, predictedPos_m - position_c).magnitude;
-        
-        return distance;
+
+        // Calculate shortest normal vector from predictedPosition to viewing direction 
+        float shortestDistance = Vector3.Cross(direction_c.normalized, predictedPos_m - position_c).magnitude;
+
+        return shortestDistance;
+
+        // Debugging
+        // Create a small 3D sphere and set its transform.position = predictedPos_m;
+        // float intersectionDistance = Vector3.Dot(direction_c.normalized, predictedPos_m - position_c);
+        // Vector3 intersectionPoint = position_c + direction_c.normalized * intersectionDistance;
+        // Viz the different vectors
+        // Camera view direction
+        // Debug.DrawRay(position_c, direction_c * 10f, Color.green, 1f);
+        // Camera to Manipulator vector
+        // Debug.DrawRay(position_c, predictedPos_m - position_c, Color.cyan, 1f);
+        // Shortest normal vector from manipulator predicted position to camera viewing vector
+        // Debug.DrawRay(predictedPos_m, intersection - predictedPos_m, Color.yellow, 1f);
     }
 
 }
