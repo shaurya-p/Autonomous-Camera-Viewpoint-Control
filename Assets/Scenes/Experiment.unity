@@ -534,6 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tasks:
+  - {fileID: 1633586863}
   - {fileID: 544914282}
   - {fileID: 1034108450}
   - {fileID: 1393987427}
@@ -541,7 +542,6 @@ MonoBehaviour:
   - {fileID: 544914282}
   - {fileID: 2022596940}
   - {fileID: 1876540829}
-  - {fileID: 1633586863}
   robotPrefabs:
   - {fileID: 6789262394414307240, guid: d389cac5588eb6f4da30dee89aa90d4d, type: 3}
   staticObjects:
@@ -919,7 +919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &315971913
 Transform:
   m_ObjectHideFlags: 0
@@ -2108,7 +2108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &544914281
 Transform:
   m_ObjectHideFlags: 0
@@ -4443,7 +4443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1034108449
 Transform:
   m_ObjectHideFlags: 0
@@ -5843,7 +5843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1393987426
 Transform:
   m_ObjectHideFlags: 0
@@ -7814,7 +7814,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1634814529
 Transform:
   m_ObjectHideFlags: 0
@@ -8594,7 +8594,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1876540828
 Transform:
   m_ObjectHideFlags: 0
@@ -9069,7 +9069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2022596939
 Transform:
   m_ObjectHideFlags: 0

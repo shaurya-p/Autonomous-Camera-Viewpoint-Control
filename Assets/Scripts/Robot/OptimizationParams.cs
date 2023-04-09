@@ -10,33 +10,36 @@ using UnityEngine;
 
 public class OptimizationParams : MonoBehaviour
 {
-    
-    public int updateRate = 10;
 
-    public GameObject cameraToolFrame;
-    public GameObject manipulatorToolFrame;
+    // Debugging
     public GameObject debugObj;
     public GameObject debugObj2;
-
-    private float startTime;
+    
+    // Timer
     private float deltaTime;
-    
-    private Transform camera_tf;
+    public int updateRate = 10;
+
+    // Manipulator states
+    public GameObject manipulator_GameObj;
     private Transform manipulator_tf;
-    
-    private Vector3 position_m;
+    private Vector3 manipulator_pos;
+    private Vector3 manipulator_vel;
+
+    // Target variables
     private Vector3 predictedPos_m;
-    private Vector3 velocity_m;
-    private Vector3 direction_c;
-    private Vector3 position_c;
+
+    // Camera states
+    public GameObject camera_GameObj;
+    private Transform camera_tf;
+    private Vector3 camera_dir;
+    private Vector3 camera_pos;
     
     void Start()    
     {
-        startTime = Time.time;
 
-        // Get EE transform
-        camera_tf = cameraToolFrame.transform;
-        manipulator_tf = manipulatorToolFrame.transform;
+        // Get transform of objects
+        camera_tf = camera_GameObj.transform;
+        manipulator_tf = manipulator_GameObj.transform;
 
         deltaTime = 1f / updateRate;
         InvokeRepeating("ScalarObjective1", 1f, deltaTime);
@@ -48,19 +51,19 @@ public class OptimizationParams : MonoBehaviour
     private float ScalarObjective1()
     {
         // Predict manipulator EE position 300 ms in the future
-        velocity_m = (manipulator_tf.position - position_m) / deltaTime;
-        predictedPos_m = position_m + 0.3f * velocity_m;
+        manipulator_vel = (manipulator_tf.position - manipulator_pos) / deltaTime;
+        predictedPos_m = manipulator_pos + 0.3f * manipulator_vel;
 
         // Update current manipulator position
-        position_m = manipulator_tf.position;
+        manipulator_pos = manipulator_tf.position;
 
         // Camera arm position and viewing direction
         // [0, 1, 0] is the viewing direction unit vector w.r.t. local camera frame
-        direction_c = camera_tf.TransformDirection(new Vector3(0f, 1f, 0f));    
-        position_c = camera_tf.position;
+        camera_dir = camera_tf.TransformDirection(new Vector3(0f, 1f, 0f));    
+        camera_pos = camera_tf.position;
 
         // Calculate shortest normal vector from predictedPosition to viewing direction 
-        float shortestDistance = Vector3.Cross(direction_c.normalized, predictedPos_m - position_c).magnitude;
+        float shortestDistance = Vector3.Cross(camera_dir.normalized, predictedPos_m - camera_pos).magnitude;
 
         return shortestDistance;
 
