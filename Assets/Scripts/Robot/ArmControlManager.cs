@@ -29,7 +29,7 @@ public class ArmControlManager : MonoBehaviour
                                      IGNORE_VAL,IGNORE_VAL, IGNORE_VAL, Mathf.PI/2}),
         // preset 5 is for seconday camera view
         new JointAngles(new float[] {0.91f, -1.13f, -0.85f,
-                                    -1.66f, 0.09f, -0.85f, 0.26f}),
+                                    -1f, 0.09f, -0.85f, 0.26f}),
         // preset 6 is for narrow pose
         new JointAngles(new float[] {-2.1f, -1.9f, -1.8f, 
                                       2f, -0.4f, -1f, Mathf.PI/2})
@@ -59,6 +59,8 @@ public class ArmControlManager : MonoBehaviour
     // Automatic grasping with IK solver
     private Coroutine currentCoroutine;
     public AutoGraspable target;
+    public Vector3 target_position;
+    public Vector3 target_rotation;
 
     void Start()
     {
@@ -203,6 +205,122 @@ public class ArmControlManager : MonoBehaviour
         yield return new WaitUntil(() => 
             jointController.MoveToJointPositionStep(jointPosition) == true);
         mode = Mode.Control;
+    }
+
+    // Automatic Viewpoint Control
+    public void MoveCamera(AutoGraspable target = null, float automationSpeed = 0.05f,
+                             bool closeGripper = true,
+                             bool backToHoverPoint = true)
+    {
+        // Update target if given
+        /*
+        (target != null)
+            this.target = target;
+        else
+        {
+            if (this.target == null)
+            {
+                Debug.Log("No target given.");
+                return;
+            }
+        }
+        */
+        // Run automation
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
+        currentCoroutine = StartCoroutine(
+            MoveCameraCoroutine(automationSpeed, closeGripper, backToHoverPoint));
+    }
+
+    private IEnumerator MoveCameraCoroutine(float automationSpeed = 0.05f,
+                                              bool closeGripper = true,
+                                              bool backToHoverPoint = true)
+    {
+        // Lock manual control
+        mode = Mode.Target;
+        // containers
+        Transform targetHoverPoint;
+        Transform targetGrabPoint;
+        Vector3 targetPosition;
+        Quaternion targetRotation;
+        float completionTime;
+
+        // Get target
+        (targetHoverPoint, targetGrabPoint) =
+            target.GetHoverAndGrapPoint(grasping.endEffector.transform.position,
+                                        grasping.endEffector.transform.rotation);
+
+        // 1, Move to hover point
+        targetPosition = target_position;
+        targetRotation = Quaternion.Euler(target_rotation);
+
+        jointAngles = jointController.GetCurrentJointTargets();
+        var (converged, targetJointAngles) =
+            newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
+        if (!converged)
+        {
+            Debug.Log("No valid IK solution given to hover point.");
+            //mode = Mode.Control;
+            yield break;
+        }
+
+        // Lerp between points
+        completionTime = (target_position -
+                          targetPosition).magnitude / automationSpeed;
+        yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
+
+        // 2, Move to graspable target
+        //targetPosition = targetGrabPoint.position;
+        //targetRotation = targetGrabPoint.rotation;
+
+        // Assume we got to the target
+        /*jointAngles = targetJointAngles;
+        (converged, targetJointAngles) = newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
+        if (!converged)
+        {
+            Debug.Log("No valid IK solution given to grasping point.");
+            mode = Mode.Control;
+            yield break;
+        }
+        
+
+        completionTime = (grasping.endEffector.transform.position -
+                          targetPosition).magnitude / automationSpeed;
+        yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
+        */
+
+        // 3, Close the gripper
+        // close the gripper
+        /*if (closeGripper)
+        {
+            gripperController.CloseGripper();
+        }
+        
+        // 4, Move back to hover point
+        if (closeGripper && backToHoverPoint)
+        {
+            targetPosition = targetHoverPoint.position;
+            targetRotation = targetHoverPoint.rotation;
+
+            // Assume we got to the target
+            jointAngles = targetJointAngles;
+            (converged, targetJointAngles) =
+                newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
+            if (!converged)
+            {
+                mode = Mode.Control;
+                yield break;
+            }
+
+            // Lerp between points
+            completionTime = (grasping.endEffector.transform.position -
+                              target.transform.position).magnitude / automationSpeed;
+            yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
+        }
+        */
+
+        // Give back to manual control
+        // mode = Mode.Control;
     }
 
 

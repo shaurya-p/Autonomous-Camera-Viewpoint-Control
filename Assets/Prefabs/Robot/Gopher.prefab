@@ -1150,7 +1150,7 @@ MonoBehaviour:
   rightArm: {fileID: 792269828976222401}
   baseControl: {fileID: 1226250857912905337}
   mainCameraControl: {fileID: 7322360101057694725}
-  _mode: 0
+  _mode: 2
   cameraControlEnabled: 0
 --- !u!1 &3126191678143847196
 GameObject:
@@ -4190,9 +4190,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateRate: 10
-  manipulator_GameObj: {fileID: 6789262394701009808}
   cam: {fileID: 4604084438910217778}
   camera_GameObj: {fileID: 6789262394221710796}
+  manipulator_GameObj: {fileID: 6789262394701009808}
 --- !u!1 &5597459918908059945
 GameObject:
   m_ObjectHideFlags: 0

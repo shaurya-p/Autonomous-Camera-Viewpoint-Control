@@ -71,6 +71,15 @@ public class ArmControl : MonoBehaviour
         }
     }
 
+    public void OnAutonomy(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            armControlManager.MoveCamera(null, automationSpeed,
+                                           false, false);
+        }
+    }
+
     public void OnTarget(InputAction.CallbackContext context)
     {
         if (context.performed)

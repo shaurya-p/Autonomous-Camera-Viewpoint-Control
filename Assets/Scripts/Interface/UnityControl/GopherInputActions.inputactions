@@ -157,6 +157,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Camera Autonomy",
+                    "type": "Button",
+                    "id": "4059b98a-a764-4493-b17a-e1b1c2ccd2b3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -971,6 +980,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Main Camera Control",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a90952ce-801b-4094-a55f-ab54b9c4acd4",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Camera Autonomy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

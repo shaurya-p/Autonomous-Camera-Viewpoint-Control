@@ -45,7 +45,7 @@ public class TargetLoc : MonoBehaviour
     private float GetDirectionError()
     {
         // Set target_pos variable
-        FindTarget();
+        target_pos = FindTarget();
         
         // Get camera arm position and viewing direction
         // [0, 1, 0] is the viewing direction unit vector w.r.t. local camera frame
@@ -71,17 +71,20 @@ public class TargetLoc : MonoBehaviour
 
     }
 
-    private void FindTarget(string mode = "")
+    private Vector3 FindTarget(string mode = "")
     {
         // Predict target position by extrapolating manipulator e.e. position 300 ms in the future
         manipulator_vel = (manipulator_tf.position - manipulator_pos) / deltaTime;
-        target_pos = manipulator_pos + lookAheadTime * manipulator_vel;
+        Vector3 target = manipulator_pos + lookAheadTime * manipulator_vel;
 
         if (mode == "screen")
-            target_pos = cam.WorldToScreenPoint(target_pos);
+            target = cam.WorldToScreenPoint(target);
 
         // Update current manipulator e.e. position
         manipulator_pos = manipulator_tf.position;
+
+        return target;
+        
     }
 
 }

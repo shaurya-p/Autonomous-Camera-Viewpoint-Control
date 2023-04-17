@@ -281,6 +281,8 @@ public class GraphicalInterface : MonoBehaviour
             RecordKey("T");
         if (Input.GetKeyDown(KeyCode.G))
             RecordKey("G");
+        if (Input.GetKeyDown(KeyCode.X))
+            RecordKey("X");
 
         // Camera Switch
         if (Input.GetKeyDown(KeyCode.Keypad8))
@@ -508,8 +510,8 @@ public class GraphicalInterface : MonoBehaviour
         numCameras = cameraSystem.cameras.Length;
         cameraSystem.DisableAllCameras();
         // turn on main camera and secondary camera
-        cameraIndex = cameraSystem.GetIndex("Head");
-        secondaryCameraIndex = cameraSystem.GetIndex("Right");
+        cameraIndex = cameraSystem.GetIndex("Left");
+        secondaryCameraIndex = cameraSystem.GetIndex("Head");
         cameraSystem.SetTargetRenderTexture(cameraIndex, cameraRendertexture);
         cameraSystem.EnableCamera(cameraIndex);
         cameraSystem.SetTargetRenderTexture(secondaryCameraIndex, secondayCameraRendertexture);

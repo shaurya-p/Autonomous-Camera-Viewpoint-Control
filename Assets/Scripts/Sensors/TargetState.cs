@@ -26,14 +26,16 @@ public class TargetState : MonoBehaviour
         return ((point1 + point2) / 2.0f);
     }
 
-    /*public bool IsWithinImage(Vector3 point, Camera cam)
+    public Vector3 Space2Image(Vector3 point)
     {
-        Vector2 camDimensions = new Vector2(cam.pixelWidth, cam.pixelHeight);
-        Vector3 imageProjection = cam.WorldToScreenPoint(point);
-        if ( - )
-        {
+        return cam.WorldToScreenPoint(point);
+    }
 
-        }
-    }*/
+
+    public bool IsVisible(Vector3 screen_point)
+    {
+        return ((screen_point.x >= 0) && (screen_point.x <= cam.pixelWidth))
+                && ((screen_point.y >= 0) && (screen_point.y <= cam.pixelHeight));
+    }
 
 }
