@@ -8,6 +8,11 @@ using UnityEngine;
 /// </summary>
 public class ArmControlManager : MonoBehaviour
 {
+    // Motion Planner
+    private Vector3 targetPosition;
+    private Quaternion targetRotation;
+    public MotionPlanner motionPlanner;
+
     public ArticulationJointController jointController;
     public ArticulationGripperController gripperController;
     public NewtonIK newtonIK;
@@ -226,101 +231,55 @@ public class ArmControlManager : MonoBehaviour
         }
         */
         // Run automation
+        // float[] jointAngles = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
-        currentCoroutine = StartCoroutine(
-            MoveCameraCoroutine(automationSpeed, closeGripper, backToHoverPoint));
+        //MoveToJointPosition(jointAngles);
+        currentCoroutine = StartCoroutine(MoveCameraCoroutine(automationSpeed, closeGripper, backToHoverPoint));
     }
 
     private IEnumerator MoveCameraCoroutine(float automationSpeed = 0.05f,
                                               bool closeGripper = true,
                                               bool backToHoverPoint = true)
     {
+        Debug.Log("IK starting");
         // Lock manual control
         mode = Mode.Target;
-        // containers
-        Transform targetHoverPoint;
-        Transform targetGrabPoint;
-        Vector3 targetPosition;
-        Quaternion targetRotation;
+             
+        // Init
         float completionTime;
 
-        // Get target
-        (targetHoverPoint, targetGrabPoint) =
-            target.GetHoverAndGrapPoint(grasping.endEffector.transform.position,
-                                        grasping.endEffector.transform.rotation);
+        // DEBUGGING - Transform to world coordinates
+        // targetPosition = leftEndEffectorLink.transform.position + (localPosition);
+        // Vector3 newLocalRotation = leftEndEffectorLink.transform.rotation.eulerAngles + (localRotation);
+        // targetRotation = Quaternion.Euler(newLocalRotation); //Quaternion.Euler(target_rotation);
 
-        // 1, Move to hover point
-        targetPosition = target_position;
-        targetRotation = Quaternion.Euler(target_rotation);
+        // Set target position and orientation in World Coordinates
+        targetPosition = motionPlanner.position;
+        targetRotation = motionPlanner.rotation;
 
-        jointAngles = jointController.GetCurrentJointTargets();
+        jointAngles = jointController.GetCurrentJointTargets(); // jointcontroller actually moves the joints
         var (converged, targetJointAngles) =
             newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
         if (!converged)
         {
             Debug.Log("No valid IK solution given to hover point.");
-            //mode = Mode.Control;
+            mode = Mode.Control;
             yield break;
         }
+        else
+            Debug.Log("IK Complete");
 
         // Lerp between points
         completionTime = (target_position -
                           targetPosition).magnitude / automationSpeed;
-        yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
 
-        // 2, Move to graspable target
-        //targetPosition = targetGrabPoint.position;
-        //targetRotation = targetGrabPoint.rotation;
+        jointController.SetJointTargets(targetJointAngles);
 
-        // Assume we got to the target
-        /*jointAngles = targetJointAngles;
-        (converged, targetJointAngles) = newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
-        if (!converged)
-        {
-            Debug.Log("No valid IK solution given to grasping point.");
-            mode = Mode.Control;
-            yield break;
-        }
-        
-
-        completionTime = (grasping.endEffector.transform.position -
-                          targetPosition).magnitude / automationSpeed;
-        yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
-        */
-
-        // 3, Close the gripper
-        // close the gripper
-        /*if (closeGripper)
-        {
-            gripperController.CloseGripper();
-        }
-        
-        // 4, Move back to hover point
-        if (closeGripper && backToHoverPoint)
-        {
-            targetPosition = targetHoverPoint.position;
-            targetRotation = targetHoverPoint.rotation;
-
-            // Assume we got to the target
-            jointAngles = targetJointAngles;
-            (converged, targetJointAngles) =
-                newtonIK.SolveIK(jointAngles, targetPosition, targetRotation);
-            if (!converged)
-            {
-                mode = Mode.Control;
-                yield break;
-            }
-
-            // Lerp between points
-            completionTime = (grasping.endEffector.transform.position -
-                              target.transform.position).magnitude / automationSpeed;
-            yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
-        }
-        */
+        yield return true;
 
         // Give back to manual control
-        // mode = Mode.Control;
+        mode = Mode.Control;
     }
 
 
@@ -364,6 +323,8 @@ public class ArmControlManager : MonoBehaviour
         (targetHoverPoint, targetGrabPoint) = 
             target.GetHoverAndGrapPoint(grasping.endEffector.transform.position,
                                         grasping.endEffector.transform.rotation);
+
+        Debug.Log("Hover pos " + targetGrabPoint.position + "Rot " + targetGrabPoint.rotation);
 
         // 1, Move to hover point
         targetPosition = targetHoverPoint.position;
@@ -458,6 +419,7 @@ public class ArmControlManager : MonoBehaviour
 
             jointController.SetJointTargets(currentAngles);
 
+            Debug.Log("Lerp complete");
             yield return new WaitForEndOfFrame();
         }
     }

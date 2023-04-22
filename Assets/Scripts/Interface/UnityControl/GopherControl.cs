@@ -189,7 +189,9 @@ public class GopherControl : MonoBehaviour
     public void OnCameraAutonomy(InputAction.CallbackContext context)
     {
         if (_mode == ControlMode.RightArm)
+        {
             leftArm.OnAutonomy(context);
+        }
     }
         
 

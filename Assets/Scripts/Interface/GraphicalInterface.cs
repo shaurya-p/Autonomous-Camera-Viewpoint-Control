@@ -186,6 +186,7 @@ public class GraphicalInterface : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log("Pos: " + leftEndEffectorRef.transform.TransformPoint(leftEndEffectorRef.transform.position));
         // Timer
         timerPanelText.text = Time.unscaledTime.ToString("0.0");
         // FPS
