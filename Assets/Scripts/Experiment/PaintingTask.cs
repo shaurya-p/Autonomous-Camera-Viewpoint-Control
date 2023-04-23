@@ -35,6 +35,7 @@ public class PaintingTask : Task
     
     public override bool CheckTaskCompletion()
     {
+        /*
         if (robot == null || paintables == null)
             return false;
         
@@ -47,6 +48,8 @@ public class PaintingTask : Task
         
         gUI.ShowPopUpMessage("Current Task Completed!");
         return true;
+    */
+        return false;
     }
 
 

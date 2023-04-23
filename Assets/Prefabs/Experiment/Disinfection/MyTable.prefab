@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 5637474041178868701}
   m_Layer: 0
   m_Name: Target cylinder
-  m_TagString: Untagged
+  m_TagString: TargetCylinder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -355,7 +355,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.10000001, z: 0.10000001}
   m_Children: []
   m_Father: {fileID: 5818919084884847355}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1016634712948040142
 MeshFilter:
@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 1605325287081759038}
   m_Layer: 0
   m_Name: Target ellipsoid
-  m_TagString: Untagged
+  m_TagString: TargetEllipsoid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -546,7 +546,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.10000001, z: 0.10000001}
   m_Children: []
   m_Father: {fileID: 5818919084884847355}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1428308009011585097
 MeshFilter:
@@ -638,8 +638,8 @@ Transform:
   m_LocalScale: {x: 1.5000001, y: 1.5, z: 1.5000001}
   m_Children:
   - {fileID: 8190668992541469809}
-  - {fileID: 4441335134715046275}
   - {fileID: 8873473392983616370}
+  - {fileID: 4441335134715046275}
   m_Father: {fileID: 8333359151893928006}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 6815001486553464037}
   m_Layer: 0
   m_Name: Target cube
-  m_TagString: Untagged
+  m_TagString: TargetCube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MotionPlanner : MonoBehaviour
 {
+    // Targets
+    private TargetLocalization targetLocalizer;
+    
     // DEBUGGING
     public GameObject DebugSphere;
     
@@ -28,6 +31,8 @@ public class MotionPlanner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (targetLocalizer == null)
+            targetLocalizer = GameObject.FindObjectOfType<TargetLocalization>();
         // Display current pose
         currentPosition = leftEndEffectorLink.transform.position;
         currentRotation = leftEndEffectorLink.transform.rotation;

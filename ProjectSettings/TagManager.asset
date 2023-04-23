@@ -12,6 +12,9 @@ TagManager:
   - Ceiling
   - Experiment
   - UI
+  - TargetCube
+  - TargetCylinder
+  - TargetEllipsoid
   layers:
   - Default
   - TransparentFX

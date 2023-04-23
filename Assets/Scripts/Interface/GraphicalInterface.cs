@@ -9,6 +9,12 @@ public class GraphicalInterface : MonoBehaviour
     // Active
     private bool active;
 
+    // Motion Planning
+    private TargetLocalization targetLocalizer;
+    private GameObject targetCube;
+    private GameObject targetCylinder;
+    private GameObject targetEllipsoid;
+
     // UI
     public GameObject[] interfaces;
     public GameObject speedometerPointer;
@@ -168,6 +174,7 @@ public class GraphicalInterface : MonoBehaviour
 
         // Timer
         timerPanelText = timerPanel.GetComponentInChildren<TextMeshProUGUI>();
+
         // FPS
         FPSCount = 0;
         FPSSum = 0;
@@ -186,6 +193,29 @@ public class GraphicalInterface : MonoBehaviour
 
     void Update()
     {
+        if (targetCube == null || targetCylinder == null || targetEllipsoid == null)
+        {
+            targetCube = GameObject.FindGameObjectWithTag("TargetCube");
+            targetCylinder = GameObject.FindGameObjectWithTag("TargetCylinder");
+            targetEllipsoid = GameObject.FindGameObjectWithTag("TargetEllipsoid");
+            
+        }
+        else
+        {
+            if (targetLocalizer != null)
+            {
+                targetLocalizer.cube = targetCube;
+                targetLocalizer.cylinder = targetCylinder;
+                targetLocalizer.ellipsoid = targetEllipsoid;
+                //Debug.Log("Set values successfully");
+            }
+            //else
+                //Debug.Log("Oh no I be null");
+        }
+        //Debug.Log(motionPlanner.targetCube != null && motionPlanner.targetCylinder != null && motionPlanner.targetEllipsoid != null);
+
+        //Debug.Log(targetCube != null);
+
         //Debug.Log("Pos: " + leftEndEffectorRef.transform.TransformPoint(leftEndEffectorRef.transform.position));
         // Timer
         timerPanelText.text = Time.unscaledTime.ToString("0.0");
@@ -489,6 +519,7 @@ public class GraphicalInterface : MonoBehaviour
         stateReader = robot.GetComponentInChildren<StateReader>();
         gopherControl = robot.GetComponentInChildren<GopherControl>();
         autoNavigation = robot.GetComponentInChildren<AutoNavigation>();
+        targetLocalizer = robot.GetComponentInChildren<TargetLocalization>();
         // Get IK and End effector reference transform for
         // switching IK reference frame based on camera view
         // TODO 1 left first and right next, no better way to tell each apart

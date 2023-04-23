@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetLoc : MonoBehaviour
+public class TargetLocalization : MonoBehaviour
 {
     // Debugging
     private GameObject debugObj;
     private GameObject debugObj2;
+
+    // Screen visibility
+    private int majorRadius;
+
+    // Targets
+    public GameObject cube;
+    public GameObject cylinder;
+    public GameObject ellipsoid;
 
     // Assignables
     public int updateRate = 10;
@@ -39,13 +47,29 @@ public class TargetLoc : MonoBehaviour
         manipulator_tf = manipulator_GameObj.transform;
 
         deltaTime = 1f / updateRate;
-        InvokeRepeating("GetDirectionError", 1f, deltaTime);
+        //InvokeRepeating("GetDirectionError", 1f, deltaTime);
+        // Set major viewing radius
+        majorRadius = cam.pixelHeight / 2 - 20;
     }
+
+    void Update()
+    {
+        //DEBUG
+        bool test = IsVisible(cube.transform.position);
+        Debug.Log("target on screen? " + IsVisible(cube.transform.position));
+    }
+
+
+    /*void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(cam.transform.position, majorRadius);
+    }*/
 
     private float GetDirectionError()
     {
         // Set target_pos variable
-        target_pos = FindTarget();
+        // target_pos = FindTarget();
         
         // Get camera arm position and viewing direction
         // [0, 1, 0] is the viewing direction unit vector w.r.t. local camera frame
@@ -70,21 +94,49 @@ public class TargetLoc : MonoBehaviour
         // Debug.DrawRay(predictedPos_m, intersection - predictedPos_m, Color.yellow, 1f);
 
     }
-
-    private Vector3 FindTarget(string mode = "")
+    
+    private Vector3 MakePrediction(string mode = "")
     {
         // Predict target position by extrapolating manipulator e.e. position 300 ms in the future
         manipulator_vel = (manipulator_tf.position - manipulator_pos) / deltaTime;
-        Vector3 target = manipulator_pos + lookAheadTime * manipulator_vel;
+        Vector3 prediction = manipulator_pos + lookAheadTime * manipulator_vel;
 
         if (mode == "screen")
-            target = cam.WorldToScreenPoint(target);
+            prediction = cam.WorldToScreenPoint(prediction);
 
         // Update current manipulator e.e. position
         manipulator_pos = manipulator_tf.position;
 
-        return target;
-        
+        return prediction;
     }
 
+    public bool IsVisible(Vector3 point)
+    {
+        // Checks if a world point projected onto camera space
+        // is within the major viewing circle.
+        // The major viewing circle has a radius of (cam.pixelHeight / 2 - threshold)
+
+        Vector3 screenPoint = cam.WorldToViewportPoint(point);
+        bool inCameraView = IsWithin01(screenPoint.x) && IsWithin01(screenPoint.y);
+        bool inFront = screenPoint.z > 0;
+
+        RaycastHit depthCheck;
+        bool blocked = false;
+
+        Vector3 dir2point = point - cam.transform.position;
+
+        float distance = Vector3.Distance(cam.transform.position, point);
+
+        if (Physics.Raycast(cam.transform.position, dir2point, out depthCheck, distance + 0.05f))
+            if (depthCheck.transform.position != point)
+                blocked = true;
+
+        return inCameraView && inFront && !blocked;
+
+    }
+
+    public bool IsWithin01(float val)
+    {
+        return val > 0 && val < 1;
+    }
 }

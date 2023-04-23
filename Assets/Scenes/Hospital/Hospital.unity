@@ -9766,24 +9766,84 @@ PrefabInstance:
       value: Room - P101
       objectReference: {fileID: 0}
     - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9848079
+      value: 0.9961947
       objectReference: {fileID: 0}
     - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.17364766
+      value: -0.08715578
       objectReference: {fileID: 0}
     - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2532441700184717719, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -20
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487609641762570141, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528293907618190626, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597252380627919783, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597252380627919783, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597252380627919783, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597252380627919783, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597252380627919783, guid: 603d57263de64fd27bef536dea3224b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 603d57263de64fd27bef536dea3224b5, type: 3}

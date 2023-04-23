@@ -7793,11 +7793,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0}
     trajectory: []
-  goalObjectSpawnArray:
-  - gameObject: {fileID: 1157694002682940248, guid: 876cbc934845e8b419514bb5a4f8704f, type: 3}
-    position: {x: -9.8, y: 0.3, z: -6.9}
-    rotation: {x: 0, y: 90, z: 0}
-    trajectory: []
+  goalObjectSpawnArray: []
 --- !u!1 &1634814528
 GameObject:
   m_ObjectHideFlags: 0
