@@ -44,6 +44,7 @@ public class GopherControl : MonoBehaviour
             baseControl.StopBase();
             leftArm.StopArm();
             _mode = ControlMode.RightArm;
+
         }
     }
 
@@ -176,6 +177,7 @@ public class GopherControl : MonoBehaviour
             leftArm.OnTranslate(context);
         else if (_mode == ControlMode.RightArm)
             rightArm.OnTranslate(context);
+            leftArm.OnAutonomy();
     }
 
     public void OnArmRotate(InputAction.CallbackContext context)
@@ -190,7 +192,7 @@ public class GopherControl : MonoBehaviour
     {
         if (_mode == ControlMode.RightArm)
         {
-            leftArm.OnAutonomy(context);
+            leftArm.OnAutonomy();
         }
     }
         

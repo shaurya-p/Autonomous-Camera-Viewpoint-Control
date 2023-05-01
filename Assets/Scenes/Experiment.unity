@@ -7788,11 +7788,7 @@ MonoBehaviour:
   robotSpawnArray: []
   staticObjectSpawnArray: []
   dynamicObjectSpawnArray: []
-  taskObjectSpawnArray:
-  - gameObject: {fileID: 990171063125143859, guid: 98530f57484453f40b00a77ab2dc7c49, type: 3}
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0}
-    trajectory: []
+  taskObjectSpawnArray: []
   goalObjectSpawnArray: []
 --- !u!1 &1634814528
 GameObject:

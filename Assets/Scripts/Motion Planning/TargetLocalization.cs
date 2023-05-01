@@ -32,7 +32,7 @@ public class TargetLocalization : MonoBehaviour
     private Vector3 manipulator_vel;
     
     // Camera states    
-    private Transform camera_tf;
+    public Transform camera_tf;
     private Vector3 camera_dir;
     private Vector3 camera_pos;
     
@@ -55,8 +55,6 @@ public class TargetLocalization : MonoBehaviour
     void Update()
     {
         //DEBUG
-        bool test = IsVisible(cube.transform.position);
-        Debug.Log("target on screen? " + IsVisible(cube.transform.position));
     }
 
 
@@ -130,7 +128,8 @@ public class TargetLocalization : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, dir2point, out depthCheck, distance + 0.05f))
             if (depthCheck.transform.position != point)
                 blocked = true;
-
+        
+        // Debug.Log("inCam " + inCameraView + "inFront " + inFront + "viz " + !blocked );
         return inCameraView && inFront && !blocked;
 
     }

@@ -12,6 +12,8 @@ public class ArmControlManager : MonoBehaviour
     private Vector3 targetPosition;
     private Quaternion targetRotation;
     public MotionPlanner motionPlanner;
+    public GameObject ee_link;
+    private Vector3 offsetDir;
 
     public ArticulationJointController jointController;
     public ArticulationGripperController gripperController;
@@ -66,6 +68,7 @@ public class ArmControlManager : MonoBehaviour
     public AutoGraspable target;
     public Vector3 target_position;
     public Vector3 target_rotation;
+
 
     void Start()
     {
@@ -212,6 +215,46 @@ public class ArmControlManager : MonoBehaviour
         mode = Mode.Control;
     }
 
+    // DEBUG
+    void OnDrawGizmos()
+    {
+        Color color;
+        color = Color.green;
+        // local up
+        DrawHelperAtCenter(motionPlanner.newY, color, 2f);
+
+        color.g -= 0.5f;
+        // global up
+        //DrawHelperAtCenter(Vector3.up, color, 1f);
+
+        color = Color.blue;
+        // local forward
+        DrawHelperAtCenter(motionPlanner.newZ, color, 2f);
+
+        color.b -= 0.5f;
+        // global forward
+        //DrawHelperAtCenter(Vector3.forward, color, 1f);
+
+        color = Color.red;
+        // local right
+        DrawHelperAtCenter(motionPlanner.newX, color, 2f);
+
+        //color.r -= 0.5f;
+        // global right
+        //DrawHelperAtCenter(Vector3.right, color, 1f);
+        //Vector3 orientation = (motionPlanner.targetLocalizer.cube.transform.position - ee_link.transform.position);
+        //color = Color.cyan;
+        //DrawHelperAtCenter(orientation, color, 2f);
+    }
+
+    private void DrawHelperAtCenter(
+                        Vector3 direction, Color color, float scale)
+    {
+        Gizmos.color = color;
+        Vector3 destination = motionPlanner.mid_point + direction * scale;
+        Gizmos.DrawLine(motionPlanner.mid_point, destination);
+    }
+
     // Automatic Viewpoint Control
     public void MoveCamera(AutoGraspable target = null, float automationSpeed = 0.05f,
                              bool closeGripper = true,
@@ -243,10 +286,14 @@ public class ArmControlManager : MonoBehaviour
                                               bool backToHoverPoint = true)
     {
         Debug.Log("IK starting");
+
+        //Vector3 orientation = (motionPlanner.targetLocalizer.cube.transform.position - ee_link.transform.position);
+        //ee_link.transform.rotation = Quaternion.LookRotation(orientation, Vector3.right);
         // Lock manual control
         mode = Mode.Target;
              
         // Init
+        
         float completionTime;
 
         // DEBUGGING - Transform to world coordinates
@@ -255,8 +302,42 @@ public class ArmControlManager : MonoBehaviour
         // targetRotation = Quaternion.Euler(newLocalRotation); //Quaternion.Euler(target_rotation);
 
         // Set target position and orientation in World Coordinates
-        targetPosition = motionPlanner.position;
-        targetRotation = motionPlanner.rotation;
+        /*
+        (Vector3 currentPosition, Quaternion currentRotation)= newtonIK.kinematicSolver.GetPose(newtonIK.kinematicSolver.numJoint);
+        //endEffectorTransform.transform.position = currentPosition;
+        //endEffectorTransform.transform.rotation = currentRotation;
+        offsetDir = new Vector3(0f, 0.01f, 0f);
+        targetPosition = ee_link.transform.position; // + ee_link.transform.TransformDirection(offsetDir);
+        // Debug.Log("current Pos = " + currentPosition + "ee pos = " + ee_link.transform.position);
+        // Debug.Log("current Rot = " + currentRotation + "ee rot = " + ee_link.transform.rotation);
+        // Vector3 orientation = (motionPlanner.targetLocalizer.cube.transform.position - ee_link.transform.position);
+        // Debug.DrawRay(ee_link.transform.position, orientation, Color.green, 2f);
+        // targetPosition = ee_link.transform.TransformDirection(ee_link.transform.position - offsetDir); //motionPlanner.desiredPosition;
+        //Debug.Log(offsetDir);
+        //Debug.Log("current position " + currentPosition + "target position " + targetPosition);
+        //orientation.x = 0;
+        //Debug.Log("local forward " + ee_link.transform.forward + "local up " + ee_link.transform.up);
+        //Quaternion targetRotation_tool = Quaternion.FromToRotation(Vector3.left, orientation); // (orientation, Vector3.up); //Quaternion.FromToRotation(Vector3.right, orientation);
+        //targetRotation = ee_link.transform.rotation * targetRotation_tool;
+
+        //targetRotation = Quaternion.LookRotation(orientation, ee_link.transform.forward);
+
+        //GameObject dummy = new GameObject();
+        //dummy.transform.LookAt(motionPlanner.targetLocalizer.cube.transform.position);
+        //targetRotation = dummy.transform.rotation;
+        // targetRotation = Quaternion.LookRotation(orientation, Vector3.forward);
+        // Debug.Log("desired rot = " + targetRotation + "current rot = " + ee_link.transform.rotation);
+        //Vector3 fwd = targetRotation * Vector3.right;
+        //Debug.DrawRay(ee_link.transform.position, fwd, Color.red, 2f);
+
+        Vector3 orientation = (motionPlanner.targetLocalizer.cube.transform.position - ee_link.transform.position);
+        GameObject dummy2 = new GameObject();
+        dummy2.transform.LookAt(motionPlanner.targetLocalizer.cube.transform); //(orientation, Vector3.right);
+        targetRotation = dummy2.transform.rotation;
+        */
+
+        (targetPosition, targetRotation) = (motionPlanner.goalPosition, motionPlanner.goalRotation);
+        Debug.Log("pos " + targetPosition + "rot " + targetRotation);
 
         jointAngles = jointController.GetCurrentJointTargets(); // jointcontroller actually moves the joints
         var (converged, targetJointAngles) =
@@ -271,15 +352,14 @@ public class ArmControlManager : MonoBehaviour
             Debug.Log("IK Complete");
 
         // Lerp between points
-        completionTime = (target_position -
+        completionTime = (grasping.endEffector.transform.position -
                           targetPosition).magnitude / automationSpeed;
+        yield return LerpJoints(jointAngles, targetJointAngles, completionTime);
 
-        jointController.SetJointTargets(targetJointAngles);
-
-        yield return true;
+        //jointController.SetJointTargets(targetJointAngles);
 
         // Give back to manual control
-        mode = Mode.Control;
+        // mode = Mode.Control;
     }
 
 

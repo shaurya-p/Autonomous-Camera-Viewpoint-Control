@@ -15,7 +15,7 @@ public class NewtonIK : MonoBehaviour
     public KinematicSolver kinematicSolver;
     public float dampedSquaresLambda = 0.01f;
 
-    void Start() {}
+    void Start() { }
 
     // Enum for the type of inverse method to use
     public enum InverseMethod
@@ -121,7 +121,7 @@ public class NewtonIK : MonoBehaviour
             // Scale the rotation axis by the angle
             // prioritize the position
             else
-                rotationAxis *= rotationAngle * Mathf.Deg2Rad; 
+                rotationAxis *= rotationAngle * Mathf.Deg2Rad;
 
             // Decay lambda over time
             float lambda = (1 - e / EPOCHS) * 0.5f;
@@ -137,7 +137,7 @@ public class NewtonIK : MonoBehaviour
         foreach (float jointAngle in newJointAngles)
             if (jointAngle == float.NaN)
                 return (false, jointAngles);
-        
+
         // Result Convergence check
         kinematicSolver.UpdateAngles(newJointAngles);
         kinematicSolver.UpdateAllTs();
