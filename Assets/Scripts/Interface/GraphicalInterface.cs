@@ -12,8 +12,9 @@ public class GraphicalInterface : MonoBehaviour
     // Motion Planning
     private TargetLocalization targetLocalizer;
     private GameObject targetCube;
-    private GameObject targetCylinder;
-    private GameObject targetEllipsoid;
+    //private GameObject targetCylinder;
+    //private GameObject targetEllipsoid;
+    //private GameObject tableSlab;
 
     // UI
     public GameObject[] interfaces;
@@ -193,20 +194,21 @@ public class GraphicalInterface : MonoBehaviour
 
     void Update()
     {
-        if (targetCube == null || targetCylinder == null || targetEllipsoid == null)
+        if (targetCube == null)
         {
             targetCube = GameObject.FindGameObjectWithTag("TargetCube");
-            targetCylinder = GameObject.FindGameObjectWithTag("TargetCylinder");
-            targetEllipsoid = GameObject.FindGameObjectWithTag("TargetEllipsoid");
-            
+            //targetCylinder = GameObject.FindGameObjectWithTag("TargetCylinder");
+            //targetEllipsoid = GameObject.FindGameObjectWithTag("TargetEllipsoid");
+            //tableSlab = GameObject.FindGameObjectWithTag("MySlab");
         }
         else
         {
             if (targetLocalizer != null)
             {
                 targetLocalizer.cube = targetCube;
-                targetLocalizer.cylinder = targetCylinder;
-                targetLocalizer.ellipsoid = targetEllipsoid;
+                //targetLocalizer.cylinder = targetCylinder;
+                //targetLocalizer.ellipsoid = targetEllipsoid;
+                //targetLocalizer.tableCenter = tableSlab;
                 //Debug.Log("Set values successfully");
             }
             //else

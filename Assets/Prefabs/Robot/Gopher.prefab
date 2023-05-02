@@ -485,16 +485,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d9265b1b0d063a42bdfa7a4b6307251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLocalizer: {fileID: 0}
-  rightEndEffectorLink: {fileID: 2590562324286638440}
-  DebugSphere: {fileID: 5294005528319964822}
   leftEndEffectorLink: {fileID: 6789262395484553935}
-  currentPosition: {x: 0, y: 0, z: 0}
-  currentRotation: {x: 0, y: 0, z: 0, w: 0}
-  desiredPosition: {x: 0, y: 0, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  offsetVector: {x: 0, y: 0, z: 0}
-  offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  rightEndEffectorLink: {fileID: 2590562324286638440}
+  targetLocalizer: {fileID: 0}
+  goalPosition: {x: 0, y: 0, z: 0}
+  goalRotation: {x: 0, y: 0, z: 0, w: 0}
+  DebugSphere: {fileID: 5294005528319964822}
 --- !u!114 &8909202020823089743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,14 +503,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89dbfeec6885eed4c8a5518282bc10f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftEndEffectorLink: {fileID: 6789262395484553935}
+  rightEndEffectorLink: {fileID: 2590562324286638440}
+  visible_targets: []
   cube: {fileID: 0}
-  cylinder: {fileID: 0}
-  ellipsoid: {fileID: 0}
   updateRate: 10
   cam: {fileID: 4604084438910217778}
-  camera_GameObj: {fileID: 6789262395093934769}
-  manipulator_GameObj: {fileID: 6789262394701009808}
-  camera_tf: {fileID: 0}
 --- !u!1 &2136532504162493289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,7 +1564,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.035, y: 0.08, z: 0.15}
+  m_Size: {x: 0.035, y: 0.03, z: 0.15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3677270186991317093
 GameObject:

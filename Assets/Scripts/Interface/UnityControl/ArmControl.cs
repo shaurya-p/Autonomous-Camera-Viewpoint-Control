@@ -7,11 +7,11 @@ public class ArmControl : MonoBehaviour
     public ArmControlManager armControlManager;
 
     // For CONTROL - velocity control
-    public float translateSpeed = 0.004f; // TODO what is this speed?
-    public float rotateSpeed = 0.2f;
+    public float translateSpeed = 0.0001f; // TODO what is this speed?
+    public float rotateSpeed = 0.1f;
 
     // For TARGET - Automatic grasping
-    public float automationSpeed = 0.05f;
+    public float automationSpeed = 0.01f;
 
     void Start()
     {}

@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class TargetLocalization : MonoBehaviour
 {
-    // Debugging
-    private GameObject debugObj;
-    private GameObject debugObj2;
-
-    // Screen visibility
-    private int majorRadius;
+    // End Effector State
+    public GameObject leftEndEffectorLink;
+    public GameObject rightEndEffectorLink;
 
     // Targets
+    public List<Vector3> visible_targets;
     public GameObject cube;
-    public GameObject cylinder;
-    public GameObject ellipsoid;
+    //public GameObject cylinder;
+    //public GameObject ellipsoid;
+    //public GameObject tableCenter;
 
     // Assignables
     public int updateRate = 10;
     public Camera cam;
-    public GameObject camera_GameObj;
-    public GameObject manipulator_GameObj;
 
     // Timer
     private float deltaTime;
@@ -32,50 +29,61 @@ public class TargetLocalization : MonoBehaviour
     private Vector3 manipulator_vel;
     
     // Camera states    
-    public Transform camera_tf;
+    private Transform camera_tf;
     private Vector3 camera_dir;
     private Vector3 camera_pos;
-    
-    // Target variables
-    private Vector3 target_pos;
+
+    // Debugging
+    private GameObject debugObj;
+    private GameObject debugObj2;
+
 
     // Start is called before the first frame update
     void Start()
     {
         // Get transform of objects
-        camera_tf = camera_GameObj.transform;
-        manipulator_tf = manipulator_GameObj.transform;
+        camera_tf = leftEndEffectorLink.transform;
+        manipulator_tf = rightEndEffectorLink.transform;
 
         deltaTime = 1f / updateRate;
-        //InvokeRepeating("GetDirectionError", 1f, deltaTime);
-        // Set major viewing radius
-        majorRadius = cam.pixelHeight / 2 - 20;
+
     }
 
     void Update()
     {
-        //DEBUG
+        visible_targets = new List<Vector3>();
+        visible_targets.Add(rightEndEffectorLink.transform.position);
+        visible_targets.Add(cube.transform.position);
+        // TrackTargets();
     }
 
-
-    /*void OnDrawGizmos()
+    private void TrackTargets()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(cam.transform.position, majorRadius);
-    }*/
+        /*
+        List<Vector3> temp = new List<Vector3>();
 
-    private float GetDirectionError()
-    {
-        // Set target_pos variable
-        // target_pos = FindTarget();
-        
+        if (IsVisible(manipulator_pos))
+            temp.Add(manipulator_pos);
+        if (IsVisible(cube.transform.position))
+            temp.Add(cube.transform.position);
+        //if (IsVisible(cylinder.transform.position))
+        //    temp.Add(cylinder.transform.position);
+        //if (IsVisible(ellipsoid.transform.position))
+        //    temp.Add(ellipsoid.transform.position);
+
+        visible_targets = temp;
+        */
+    }
+
+    private float GetDirectionError(Vector3 point)
+    {    
         // Get camera arm position and viewing direction
         // [0, 1, 0] is the viewing direction unit vector w.r.t. local camera frame
         camera_dir = camera_tf.TransformDirection(new Vector3(0f, 1f, 0f));
         camera_pos = camera_tf.position;
 
         // Calculate shortest normal vector from target to viewing direction vector
-        float shortestDistance = Vector3.Cross(camera_dir.normalized, target_pos - camera_pos).magnitude;
+        float shortestDistance = Vector3.Cross(camera_dir.normalized, point - camera_pos).magnitude;
 
         return shortestDistance;
 

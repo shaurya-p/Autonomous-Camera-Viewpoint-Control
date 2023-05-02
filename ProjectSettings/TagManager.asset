@@ -15,6 +15,7 @@ TagManager:
   - TargetCube
   - TargetCylinder
   - TargetEllipsoid
+  - MySlab
   layers:
   - Default
   - TransparentFX

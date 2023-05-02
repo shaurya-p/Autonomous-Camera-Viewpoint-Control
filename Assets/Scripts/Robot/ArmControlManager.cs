@@ -221,7 +221,7 @@ public class ArmControlManager : MonoBehaviour
         Color color;
         color = Color.green;
         // local up
-        DrawHelperAtCenter(motionPlanner.newY, color, 2f);
+        DrawHelperAtCenter(motionPlanner.GetNewCoords()[1], color, 2f);
 
         color.g -= 0.5f;
         // global up
@@ -229,7 +229,7 @@ public class ArmControlManager : MonoBehaviour
 
         color = Color.blue;
         // local forward
-        DrawHelperAtCenter(motionPlanner.newZ, color, 2f);
+        DrawHelperAtCenter(motionPlanner.GetNewCoords()[2], color, 2f);
 
         color.b -= 0.5f;
         // global forward
@@ -237,7 +237,7 @@ public class ArmControlManager : MonoBehaviour
 
         color = Color.red;
         // local right
-        DrawHelperAtCenter(motionPlanner.newX, color, 2f);
+        DrawHelperAtCenter(motionPlanner.GetNewCoords()[0], color, 2f);
 
         //color.r -= 0.5f;
         // global right
@@ -251,12 +251,12 @@ public class ArmControlManager : MonoBehaviour
                         Vector3 direction, Color color, float scale)
     {
         Gizmos.color = color;
-        Vector3 destination = motionPlanner.mid_point + direction * scale;
-        Gizmos.DrawLine(motionPlanner.mid_point, destination);
+        Vector3 destination = motionPlanner.GetCentroid() + direction * scale;
+        Gizmos.DrawLine(motionPlanner.GetCentroid(), destination);
     }
 
     // Automatic Viewpoint Control
-    public void MoveCamera(AutoGraspable target = null, float automationSpeed = 0.05f,
+    public void MoveCamera(AutoGraspable target = null, float automationSpeed = 0.1f,
                              bool closeGripper = true,
                              bool backToHoverPoint = true)
     {
@@ -285,7 +285,7 @@ public class ArmControlManager : MonoBehaviour
                                               bool closeGripper = true,
                                               bool backToHoverPoint = true)
     {
-        Debug.Log("IK starting");
+        // Debug.Log("IK starting");
 
         //Vector3 orientation = (motionPlanner.targetLocalizer.cube.transform.position - ee_link.transform.position);
         //ee_link.transform.rotation = Quaternion.LookRotation(orientation, Vector3.right);
@@ -337,7 +337,6 @@ public class ArmControlManager : MonoBehaviour
         */
 
         (targetPosition, targetRotation) = (motionPlanner.goalPosition, motionPlanner.goalRotation);
-        Debug.Log("pos " + targetPosition + "rot " + targetRotation);
 
         jointAngles = jointController.GetCurrentJointTargets(); // jointcontroller actually moves the joints
         var (converged, targetJointAngles) =
@@ -348,8 +347,8 @@ public class ArmControlManager : MonoBehaviour
             mode = Mode.Control;
             yield break;
         }
-        else
-            Debug.Log("IK Complete");
+        //else
+            //Debug.Log("IK Complete");
 
         // Lerp between points
         completionTime = (grasping.endEffector.transform.position -
@@ -499,7 +498,7 @@ public class ArmControlManager : MonoBehaviour
 
             jointController.SetJointTargets(currentAngles);
 
-            Debug.Log("Lerp complete");
+            // Debug.Log("Lerp complete");
             yield return new WaitForEndOfFrame();
         }
     }
